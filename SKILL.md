@@ -98,3 +98,4 @@ description: 王栎鑫行程月历（𝐊.𝐀月历）制作与修订管线。�
 - `scripts/check_sync_links.py` — 同步博链完整性自检
 - `scripts/check_calendar.py` — 成品格式 lint（日期/编号/链接完整性/💌）
 - `scripts/check_skeleton.py` — 骨架完备性倒查（带排除规则层 + 跨月查找）
+- `scripts/resolve_tcn.py` — t.cn 短链批量还原为原链（产出 .resolved.txt 供骨架核对；--write 可就地改写）

@@ -63,10 +63,14 @@ for i, raw in enumerate(lines, 1):
     # 链接被空格切断（...3864940 3）：致命
     if re.search(r'weibo\.com/\d+/\d+ \d', raw):
         errors.append(f'L{i} 链接疑似被空格切断：{s[:60]}')
-    # 链接格式校验
+    # 链接格式校验（weibo.com 数字/base62 原链、t.cn 短链、v.douyin.com/小红书 用户贴的站外链均合法；
+    # 链接允许带 ?query 和 #fragment 后缀）
     for u in url_re.findall(raw):
-        if not (re.match(r'^https://weibo\.com/\d+/[A-Za-z0-9]+$', u)
-                or re.match(r'^http://t\.cn/[A-Za-z0-9]+$', u)):
+        core = u.split('?')[0].split('#')[0]
+        if not (re.match(r'^https://weibo\.com/\d+/[A-Za-z0-9]+$', core)
+                or re.match(r'^https?://t\.cn/[A-Za-z0-9]+$', core)
+                or re.match(r'^https://v\.douyin\.com/[A-Za-z0-9_\-]+/?$', core)
+                or re.match(r'^https?://(www\.)?(xiaohongshu|xhslink)\.com/\S+$', core)):
             errors.append(f'L{i} 链接格式异常：{u}')
     # 同步博缺💌：致命（裸链接行紧跟💌行是合法备份链，放行）
     if '7796348707' in raw and '💌' not in raw and not s.startswith('http'):

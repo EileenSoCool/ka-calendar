@@ -27,6 +27,7 @@ Claude 的技能入口说明，定义触发场景、整体流程、溯源纪律�
 - `check_sync_links.py`：同步博链完整性自检
 - `check_calendar.py`：成品格式 lint（半角日期/乱序/编号/断链/缺💌）
 - `check_skeleton.py`：骨架完备性倒查（带排除规则层 + 跨月查找，四分类输出）
+- `resolve_tcn.py`：t.cn 短链批量还原为 weibo.com 原链（骨架核对前先跑它）
 
 ## 与输出目录的关系
 
