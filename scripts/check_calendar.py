@@ -14,7 +14,7 @@ lines = open(path, encoding='utf-8').read().splitlines()
 
 errors, warnings = [], []
 
-date_re = re.compile(r'^[𝟎-𝟗]{4}$')
+date_re = re.compile(r'^([𝟎-𝟗]{4})(?=\s|$)')  # 日期行允许带注释后缀（如 "𝟎𝟐𝟏𝟔 除夕""𝟎𝟑𝟎𝟑 元宵节"）
 item_re = re.compile(r'^([0-9])️⃣')
 url_re = re.compile(r'https?://\S+')
 
@@ -43,10 +43,12 @@ for i, raw in enumerate(lines, 1):
     if re.match(r'^0[0-9]{3}$', s) or re.match(r'^[0-9]{4}$', s):
         errors.append(f'L{i} 半角日期：{s!r}（应为全角粗体 𝟎𝐗𝐗𝐗）')
         continue
-    if date_re.match(s):
+    dm = date_re.match(s)
+    if dm:
         flush_block()
-        mm = fw2int[s[0]] * 10 + fw2int[s[1]]
-        dd = fw2int[s[2]] * 10 + fw2int[s[3]]
+        dstr = dm.group(1)
+        mm = fw2int[dstr[0]] * 10 + fw2int[dstr[1]]
+        dd = fw2int[dstr[2]] * 10 + fw2int[dstr[3]]
         if not (1 <= mm <= 12 and 1 <= dd <= 31):
             errors.append(f'L{i} 非法日期：{s}')
         mmdd = mm * 100 + dd
